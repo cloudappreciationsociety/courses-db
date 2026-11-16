@@ -1,3 +1,22 @@
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
+INSERT INTO
+    app_user (university_id, net_id, first_name, last_name, password, role)
+VALUES
+    ('N64820584', 'sk1', 'Sarah', 'Kendall', crypt('123456', gen_salt('bf')), 'instructor'),
+    ('N29842114', 'sc1', 'Sam', 'Campbell', crypt('123456', gen_salt('bf')), 'instructor'),
+    ('N19342150', 'cw1', 'Claudia', 'Winkleman', crypt('123456', gen_salt('bf')), 'instructor'),
+    ('N19332159', 'bc1', 'Bridget', 'Christie', crypt('123456', gen_salt('bf')), 'instructor'),
+    ('N69332159', 'az1', 'Andy', 'Zaltzman', crypt('123456', gen_salt('bf')), 'instructor'),
+    ('N00000001', 'jw1', 'Josh', 'Widdicombe', crypt('123456', gen_salt('bf')), 'student'),
+    ('N00000002', 'ja1', 'James', 'Acaster', crypt('123456', gen_salt('bf')), 'student'),
+    ('N00000003', 'rc1', 'Roisin', 'Conaty', crypt('123456', gen_salt('bf')), 'student'),
+    ('N00000004', 'rr1', 'Romesh', 'Ranganathan', crypt('123456', gen_salt('bf')), 'student'),
+    ('N00000005', 'tk1', 'Tim', 'Key', crypt('123456', gen_salt('bf')), 'student'),
+    ('N10000000', 'gd1', 'Greg', 'Davies', crypt('123456', gen_salt('bf')), 'admin'),
+    ('N10000001', 'ah1', 'Alex', 'Horne', crypt('123456', gen_salt('bf')), 'admin');
+
+
 INSERT INTO
     grade_scale (grade, grade_points)
 VALUES 
@@ -234,28 +253,28 @@ $$;
 
 -- People
 INSERT INTO
-    instructor (instructor_id, first_name, last_name, department_id)
+    instructor (university_id, department_id)
 VALUES 
-    ('N64820584', 'Sarah', 'Kendall', 'CS'),
-    ('N29842114', 'Sam', 'Campbell', 'CS'),
-    ('N19342150', 'Claudia', 'Winkleman', 'CS'),
-    ('N19332159', 'Bridget', 'Christie', 'MA'),
-    ('N69332159', 'Andy', 'Zaltzman', 'MA');
+    ('N64820584', 'CS'),
+    ('N29842114', 'CS'),
+    ('N19342150', 'CS'),
+    ('N19332159', 'MA'),
+    ('N69332159', 'MA');
 
 INSERT INTO
-    student (student_id, first_name, last_name, career_level, total_credits, department_id)
+    student (university_id, career_level, total_credits, department_id)
 VALUES 
-    ('N00000001', 'Josh', 'Widdicombe', 'undergrad', 62.0, 'CS'),
-    ('N00000002', 'James', 'Acaster', 'undergrad', 58.0, 'CS'),
-    ('N00000003', 'Roisin', 'Conaty', 'undergrad', 12.0, 'CS'),
-    ('N00000004', 'Romesh', 'Ranganathan', 'grad', 12.0, 'CS'),
-    ('N00000005', 'Tim', 'Key', 'undergrad', 6.0, 'MA');
+    ('N00000001', 'undergrad', 62.0, 'CS'),
+    ('N00000002', 'undergrad', 58.0, 'CS'),
+    ('N00000003', 'undergrad', 12.0, 'CS'),
+    ('N00000004', 'grad', 12.0, 'CS'),
+    ('N00000005', 'undergrad', 6.0, 'MA');
 
 INSERT INTO
-    admin (admin_id, first_name, last_name)
+    admin (university_id)
 VALUES 
-    ('N10000000', 'Greg', 'Davies'),
-    ('N10000001', 'Alex', 'Horne');
+    ('N10000000'),
+    ('N10000001');
 
 INSERT INTO
     teaches (instructor_id, section_id)
@@ -336,7 +355,7 @@ UPDATE section s SET
 UPDATE section s SET status =
     CASE
         WHEN s.waitlist_count > 0 THEN 'waitlist'
-        WHEN s.enrolled_count >= s.capcity THEN 'closed'
+        WHEN s.enrolled_count >= s.capacity THEN 'closed'
         ELSE 'open'
     END
 WHERE s.building_id IS NOT NULL;

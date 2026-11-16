@@ -1,0 +1,1367 @@
+{
+  "id": "00000000-0000-0000-0000-000000000000",
+  "prevId": "",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.department": {
+      "name": "department",
+      "schema": "",
+      "columns": {
+        "department_id": {
+          "name": "department_id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "school_id": {
+          "name": "school_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "department_school_id_fkey": {
+          "name": "department_school_id_fkey",
+          "tableFrom": "department",
+          "tableTo": "school",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "school_id"
+          ],
+          "columnsTo": [
+            "school_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "department_name_key": {
+          "columns": [
+            "name"
+          ],
+          "nullsNotDistinct": false,
+          "name": "department_name_key"
+        }
+      },
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.campus": {
+      "name": "campus",
+      "schema": "",
+      "columns": {
+        "campus_id": {
+          "name": "campus_id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "campus_name_key": {
+          "columns": [
+            "name"
+          ],
+          "nullsNotDistinct": false,
+          "name": "campus_name_key"
+        }
+      },
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.building": {
+      "name": "building",
+      "schema": "",
+      "columns": {
+        "building_id": {
+          "name": "building_id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "campus_id": {
+          "name": "campus_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "building_campus_id_fkey": {
+          "name": "building_campus_id_fkey",
+          "tableFrom": "building",
+          "tableTo": "campus",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "campus_id"
+          ],
+          "columnsTo": [
+            "campus_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "building_name_key": {
+          "columns": [
+            "name"
+          ],
+          "nullsNotDistinct": false,
+          "name": "building_name_key"
+        }
+      },
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.admin": {
+      "name": "admin",
+      "schema": "",
+      "columns": {
+        "admin_id": {
+          "name": "admin_id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "first_name": {
+          "name": "first_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "last_name": {
+          "name": "last_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.instructor": {
+      "name": "instructor",
+      "schema": "",
+      "columns": {
+        "instructor_id": {
+          "name": "instructor_id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "first_name": {
+          "name": "first_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "last_name": {
+          "name": "last_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "department_id": {
+          "name": "department_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "instructor_department_id_fkey": {
+          "name": "instructor_department_id_fkey",
+          "tableFrom": "instructor",
+          "tableTo": "department",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "department_id"
+          ],
+          "columnsTo": [
+            "department_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.student": {
+      "name": "student",
+      "schema": "",
+      "columns": {
+        "student_id": {
+          "name": "student_id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "first_name": {
+          "name": "first_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "last_name": {
+          "name": "last_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "career_level": {
+          "name": "career_level",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "total_credits": {
+          "name": "total_credits",
+          "type": "numeric(5, 1)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'0'"
+        },
+        "department_id": {
+          "name": "department_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "student_department_id_fkey": {
+          "name": "student_department_id_fkey",
+          "tableFrom": "student",
+          "tableTo": "department",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "department_id"
+          ],
+          "columnsTo": [
+            "department_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "student_career_level_check": {
+          "name": "student_career_level_check",
+          "value": "career_level = ANY (ARRAY['undergrad'::text, 'grad'::text])"
+        },
+        "student_total_credits_check": {
+          "name": "student_total_credits_check",
+          "value": "total_credits >= (0)::numeric"
+        }
+      },
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.course": {
+      "name": "course",
+      "schema": "",
+      "columns": {
+        "course_id": {
+          "name": "course_id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "title": {
+          "name": "title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "credits": {
+          "name": "credits",
+          "type": "numeric(3, 1)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "requires_dept_consent": {
+          "name": "requires_dept_consent",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "career_level": {
+          "name": "career_level",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "department_id": {
+          "name": "department_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "course_department_id_fkey": {
+          "name": "course_department_id_fkey",
+          "tableFrom": "course",
+          "tableTo": "department",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "department_id"
+          ],
+          "columnsTo": [
+            "department_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "course_credits_check": {
+          "name": "course_credits_check",
+          "value": "credits > (0)::numeric"
+        },
+        "course_career_level_check": {
+          "name": "course_career_level_check",
+          "value": "career_level = ANY (ARRAY['undergrad'::text, 'grad'::text])"
+        }
+      },
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.grade_scale": {
+      "name": "grade_scale",
+      "schema": "",
+      "columns": {
+        "grade": {
+          "name": "grade",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "grade_points": {
+          "name": "grade_points",
+          "type": "numeric(4, 3)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.prerequisite": {
+      "name": "prerequisite",
+      "schema": "",
+      "columns": {
+        "prereq_id": {
+          "name": "prereq_id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "identity": {
+            "type": "always",
+            "name": "prerequisite_prereq_id_seq",
+            "increment": "1",
+            "minValue": "1",
+            "maxValue": "2147483647",
+            "startWith": "1",
+            "cache": "1",
+            "cycle": false,
+            "schema": "public"
+          }
+        },
+        "course_id": {
+          "name": "course_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "prereq_type": {
+          "name": "prereq_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "parent_prereq_id": {
+          "name": "parent_prereq_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "target_course_id": {
+          "name": "target_course_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "min_grade": {
+          "name": "min_grade",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "prerequisite_course_id_fkey": {
+          "name": "prerequisite_course_id_fkey",
+          "tableFrom": "prerequisite",
+          "tableTo": "course",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "course_id"
+          ],
+          "columnsTo": [
+            "course_id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        },
+        "prerequisite_target_course_id_fkey": {
+          "name": "prerequisite_target_course_id_fkey",
+          "tableFrom": "prerequisite",
+          "tableTo": "course",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "target_course_id"
+          ],
+          "columnsTo": [
+            "course_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "prerequisite_min_grade_fkey": {
+          "name": "prerequisite_min_grade_fkey",
+          "tableFrom": "prerequisite",
+          "tableTo": "grade_scale",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "min_grade"
+          ],
+          "columnsTo": [
+            "grade"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "prerequisite_parent_prereq_id_course_id_fkey": {
+          "name": "prerequisite_parent_prereq_id_course_id_fkey",
+          "tableFrom": "prerequisite",
+          "tableTo": "prerequisite",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "course_id",
+            "parent_prereq_id"
+          ],
+          "columnsTo": [
+            "prereq_id",
+            "course_id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "prerequisite_prereq_id_course_id_key": {
+          "columns": [
+            "prereq_id",
+            "course_id"
+          ],
+          "nullsNotDistinct": false,
+          "name": "prerequisite_prereq_id_course_id_key"
+        }
+      },
+      "checkConstraints": {
+        "prerequisite_prereq_type_check": {
+          "name": "prerequisite_prereq_type_check",
+          "value": "prereq_type = ANY (ARRAY['and'::text, 'or'::text, 'not'::text, 'course'::text])"
+        },
+        "prerequisite_check": {
+          "name": "prerequisite_check",
+          "value": "(parent_prereq_id IS NULL) OR (parent_prereq_id <> prereq_id)"
+        },
+        "prerequisite_check1": {
+          "name": "prerequisite_check1",
+          "value": "((prereq_type = 'course'::text) AND (target_course_id IS NOT NULL) AND (target_course_id <> course_id)) OR ((prereq_type <> 'course'::text) AND (target_course_id IS NULL) AND (min_grade IS NULL))"
+        }
+      },
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.registration_request": {
+      "name": "registration_request",
+      "schema": "",
+      "columns": {
+        "request_id": {
+          "name": "request_id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "identity": {
+            "type": "always",
+            "name": "registration_request_request_id_seq",
+            "increment": "1",
+            "minValue": "1",
+            "maxValue": "2147483647",
+            "startWith": "1",
+            "cache": "1",
+            "cycle": false,
+            "schema": "public"
+          }
+        },
+        "student_id": {
+          "name": "student_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "add_section_id": {
+          "name": "add_section_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "drop_section_id": {
+          "name": "drop_section_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "request_type": {
+          "name": "request_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'pending'"
+        },
+        "submitted_at": {
+          "name": "submitted_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "reviewed_at": {
+          "name": "reviewed_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "reviewed_by": {
+          "name": "reviewed_by",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "admin_note": {
+          "name": "admin_note",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "registration_request_student_id_fkey": {
+          "name": "registration_request_student_id_fkey",
+          "tableFrom": "registration_request",
+          "tableTo": "student",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "student_id"
+          ],
+          "columnsTo": [
+            "student_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "registration_request_add_section_id_fkey": {
+          "name": "registration_request_add_section_id_fkey",
+          "tableFrom": "registration_request",
+          "tableTo": "section",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "add_section_id"
+          ],
+          "columnsTo": [
+            "section_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "registration_request_drop_section_id_fkey": {
+          "name": "registration_request_drop_section_id_fkey",
+          "tableFrom": "registration_request",
+          "tableTo": "section",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "drop_section_id"
+          ],
+          "columnsTo": [
+            "section_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "registration_request_reviewed_by_fkey": {
+          "name": "registration_request_reviewed_by_fkey",
+          "tableFrom": "registration_request",
+          "tableTo": "admin",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "reviewed_by"
+          ],
+          "columnsTo": [
+            "admin_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "registration_request_request_type_check": {
+          "name": "registration_request_request_type_check",
+          "value": "request_type = ANY (ARRAY['enroll'::text, 'swap'::text, 'drop'::text])"
+        },
+        "registration_request_status_check": {
+          "name": "registration_request_status_check",
+          "value": "status = ANY (ARRAY['pending'::text, 'approved'::text, 'denied'::text, 'waitlisted'::text])"
+        },
+        "registration_request_check": {
+          "name": "registration_request_check",
+          "value": "((request_type = 'swap'::text) AND (add_section_id IS NOT NULL) AND (drop_section_id IS NOT NULL) AND (add_section_id <> drop_section_id)) OR ((request_type = 'enroll'::text) AND (add_section_id IS NOT NULL) AND (drop_section_id IS NULL)) OR ((request_type = 'drop'::text) AND (add_section_id IS NULL) AND (drop_section_id IS NOT NULL))"
+        }
+      },
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.school": {
+      "name": "school",
+      "schema": "",
+      "columns": {
+        "school_id": {
+          "name": "school_id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "school_name_key": {
+          "columns": [
+            "name"
+          ],
+          "nullsNotDistinct": false,
+          "name": "school_name_key"
+        }
+      },
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.section": {
+      "name": "section",
+      "schema": "",
+      "columns": {
+        "section_id": {
+          "name": "section_id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "identity": {
+            "type": "always",
+            "name": "section_section_id_seq",
+            "increment": "1",
+            "minValue": "1",
+            "maxValue": "2147483647",
+            "startWith": "1",
+            "cache": "1",
+            "cycle": false,
+            "schema": "public"
+          }
+        },
+        "course_id": {
+          "name": "course_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "section_code": {
+          "name": "section_code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "session_id": {
+          "name": "session_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "component": {
+          "name": "component",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'lecture'"
+        },
+        "instruction_mode": {
+          "name": "instruction_mode",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'in_person'"
+        },
+        "notes": {
+          "name": "notes",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "enrolled_count": {
+          "name": "enrolled_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "waitlist_count": {
+          "name": "waitlist_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'open'"
+        },
+        "capacity": {
+          "name": "capacity",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 30
+        },
+        "building_id": {
+          "name": "building_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "room_number": {
+          "name": "room_number",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "time_slot_id": {
+          "name": "time_slot_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "start_time": {
+          "name": "start_time",
+          "type": "time",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "end_time": {
+          "name": "end_time",
+          "type": "time",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "section_course_id_fkey": {
+          "name": "section_course_id_fkey",
+          "tableFrom": "section",
+          "tableTo": "course",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "course_id"
+          ],
+          "columnsTo": [
+            "course_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "cascade"
+        },
+        "section_session_id_fkey": {
+          "name": "section_session_id_fkey",
+          "tableFrom": "section",
+          "tableTo": "session",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "session_id"
+          ],
+          "columnsTo": [
+            "session_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "cascade"
+        },
+        "section_building_id_room_number_fkey": {
+          "name": "section_building_id_room_number_fkey",
+          "tableFrom": "section",
+          "tableTo": "classroom",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "building_id",
+            "room_number"
+          ],
+          "columnsTo": [
+            "building_id",
+            "room_number"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "section_time_slot_id_start_time_end_time_fkey": {
+          "name": "section_time_slot_id_start_time_end_time_fkey",
+          "tableFrom": "section",
+          "tableTo": "time_slot",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "time_slot_id",
+            "start_time",
+            "end_time"
+          ],
+          "columnsTo": [
+            "time_slot_id",
+            "start_time",
+            "end_time"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "section_course_id_section_code_session_id_key": {
+          "columns": [
+            "session_id",
+            "section_code",
+            "course_id"
+          ],
+          "nullsNotDistinct": false,
+          "name": "section_course_id_section_code_session_id_key"
+        }
+      },
+      "checkConstraints": {
+        "section_component_check": {
+          "name": "section_component_check",
+          "value": "component = ANY (ARRAY['lecture'::text, 'recitation'::text, 'laboratory'::text])"
+        },
+        "section_instruction_mode_check": {
+          "name": "section_instruction_mode_check",
+          "value": "instruction_mode = ANY (ARRAY['in_person'::text, 'online'::text, 'hybrid'::text])"
+        },
+        "section_enrolled_count_check": {
+          "name": "section_enrolled_count_check",
+          "value": "enrolled_count >= 0"
+        },
+        "section_waitlist_count_check": {
+          "name": "section_waitlist_count_check",
+          "value": "waitlist_count >= 0"
+        },
+        "section_status_check": {
+          "name": "section_status_check",
+          "value": "status = ANY (ARRAY['open'::text, 'waitlist'::text, 'closed'::text, 'canceled'::text])"
+        },
+        "section_capacity_check": {
+          "name": "section_capacity_check",
+          "value": "capacity >= 0"
+        },
+        "section_check": {
+          "name": "section_check",
+          "value": "(building_id IS NULL) = (room_number IS NULL)"
+        },
+        "section_check1": {
+          "name": "section_check1",
+          "value": "(instruction_mode = 'online'::text) OR (building_id IS NOT NULL)"
+        },
+        "section_check2": {
+          "name": "section_check2",
+          "value": "enrolled_count <= capacity"
+        }
+      },
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.session": {
+      "name": "session",
+      "schema": "",
+      "columns": {
+        "session_id": {
+          "name": "session_id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "semester": {
+          "name": "semester",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "year": {
+          "name": "year",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "start_date": {
+          "name": "start_date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "end_date": {
+          "name": "end_date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "session_semester_check": {
+          "name": "session_semester_check",
+          "value": "semester = ANY (ARRAY['fall'::text, 'spring'::text, 'summer'::text])"
+        }
+      },
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.teaches": {
+      "name": "teaches",
+      "schema": "",
+      "columns": {
+        "instructor_id": {
+          "name": "instructor_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "section_id": {
+          "name": "section_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "teaches_instructor_id_fkey": {
+          "name": "teaches_instructor_id_fkey",
+          "tableFrom": "teaches",
+          "tableTo": "instructor",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "instructor_id"
+          ],
+          "columnsTo": [
+            "instructor_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "teaches_section_id_fkey": {
+          "name": "teaches_section_id_fkey",
+          "tableFrom": "teaches",
+          "tableTo": "section",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "section_id"
+          ],
+          "columnsTo": [
+            "section_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "teaches_pkey": {
+          "name": "teaches_pkey",
+          "columns": [
+            "section_id",
+            "instructor_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.in_cart": {
+      "name": "in_cart",
+      "schema": "",
+      "columns": {
+        "student_id": {
+          "name": "student_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "section_id": {
+          "name": "section_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "in_cart_student_id_fkey": {
+          "name": "in_cart_student_id_fkey",
+          "tableFrom": "in_cart",
+          "tableTo": "student",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "student_id"
+          ],
+          "columnsTo": [
+            "student_id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "in_cart_section_id_fkey": {
+          "name": "in_cart_section_id_fkey",
+          "tableFrom": "in_cart",
+          "tableTo": "section",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "section_id"
+          ],
+          "columnsTo": [
+            "section_id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "in_cart_pkey": {
+          "name": "in_cart_pkey",
+          "columns": [
+            "student_id",
+            "section_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.classroom": {
+      "name": "classroom",
+      "schema": "",
+      "columns": {
+        "building_id": {
+          "name": "building_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "room_number": {
+          "name": "room_number",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "classroom_building_id_fkey": {
+          "name": "classroom_building_id_fkey",
+          "tableFrom": "classroom",
+          "tableTo": "building",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "building_id"
+          ],
+          "columnsTo": [
+            "building_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "classroom_pkey": {
+          "name": "classroom_pkey",
+          "columns": [
+            "room_number",
+            "building_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.time_slot": {
+      "name": "time_slot",
+      "schema": "",
+      "columns": {
+        "time_slot_id": {
+          "name": "time_slot_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "start_time": {
+          "name": "start_time",
+          "type": "time",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "end_time": {
+          "name": "end_time",
+          "type": "time",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "time_slot_pkey": {
+          "name": "time_slot_pkey",
+          "columns": [
+            "time_slot_id",
+            "start_time",
+            "end_time"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "time_slot_check": {
+          "name": "time_slot_check",
+          "value": "end_time > start_time"
+        }
+      },
+      "policies": {},
+      "isRLSEnabled": false
+    },
+    "public.takes": {
+      "name": "takes",
+      "schema": "",
+      "columns": {
+        "student_id": {
+          "name": "student_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "section_id": {
+          "name": "section_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "waitlist_position": {
+          "name": "waitlist_position",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "grade": {
+          "name": "grade",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "takes_student_id_fkey": {
+          "name": "takes_student_id_fkey",
+          "tableFrom": "takes",
+          "tableTo": "student",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "student_id"
+          ],
+          "columnsTo": [
+            "student_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "takes_section_id_fkey": {
+          "name": "takes_section_id_fkey",
+          "tableFrom": "takes",
+          "tableTo": "section",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "section_id"
+          ],
+          "columnsTo": [
+            "section_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "takes_grade_fkey": {
+          "name": "takes_grade_fkey",
+          "tableFrom": "takes",
+          "tableTo": "grade_scale",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "grade"
+          ],
+          "columnsTo": [
+            "grade"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "takes_pkey": {
+          "name": "takes_pkey",
+          "columns": [
+            "student_id",
+            "section_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "takes_status_check": {
+          "name": "takes_status_check",
+          "value": "status = ANY (ARRAY['enrolled'::text, 'waitlisted'::text, 'dropped'::text, 'completed'::text])"
+        },
+        "takes_waitlist_position_check": {
+          "name": "takes_waitlist_position_check",
+          "value": "waitlist_position > 0"
+        },
+        "takes_check": {
+          "name": "takes_check",
+          "value": "(status = 'waitlisted'::text) = (waitlist_position IS NOT NULL)"
+        },
+        "takes_check1": {
+          "name": "takes_check1",
+          "value": "(grade IS NULL) OR (status = 'completed'::text)"
+        }
+      },
+      "policies": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  },
+  "internal": {
+    "tables": {}
+  }
+}

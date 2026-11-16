@@ -1,3 +1,12 @@
+CREATE TABLE app_user (
+    university_id TEXT PRIMARY KEY,
+    net_id TEXT  NOT NULL UNIQUE,
+    first_name TEXT NOT NULL,
+    last_name TEXT NOT NULL,
+    password TEXT NOT NULL,
+    role TEXT NOT NULL CHECK (role IN ('student', 'admin', 'instructor'))
+);
+
 CREATE TABLE grade_scale (
     grade TEXT PRIMARY KEY,
     grade_points NUMERIC(4, 3)
@@ -155,22 +164,18 @@ CREATE TABLE section (
 );
 
 CREATE TABLE instructor (
-    instructor_id TEXT PRIMARY KEY,
-    first_name TEXT NOT NULL,
-    last_name TEXT NOT NULL,
+    university_id TEXT PRIMARY KEY REFERENCES app_user (university_id) ON DELETE CASCADE,
     department_id TEXT NOT NULL REFERENCES department (department_id) ON UPDATE CASCADE
 );
 
 CREATE TABLE teaches (
-    instructor_id TEXT NOT NULL REFERENCES instructor (instructor_id),
+    instructor_id TEXT NOT NULL REFERENCES instructor (university_id),
     section_id INTEGER NOT NULL REFERENCES section (section_id),
     PRIMARY KEY (instructor_id, section_id)
 );
 
 CREATE TABLE student (
-    student_id TEXT PRIMARY KEY,
-    first_name TEXT NOT NULL,
-    last_name TEXT NOT NULL,
+    university_id TEXT PRIMARY KEY REFERENCES app_user (university_id) ON DELETE CASCADE,
     career_level TEXT NOT NULL CHECK (
         career_level IN ('undergrad', 'grad')
     ),
@@ -179,13 +184,11 @@ CREATE TABLE student (
 );
 
 CREATE TABLE admin (
-    admin_id TEXT PRIMARY KEY,
-    first_name TEXT NOT NULL,
-    last_name TEXT NOT NULL
+    university_id TEXT PRIMARY KEY REFERENCES app_user (university_id) ON DELETE CASCADE
 );
 
 CREATE TABLE takes (
-    student_id TEXT NOT NULL REFERENCES student (student_id),
+    student_id TEXT NOT NULL REFERENCES student (university_id),
     section_id INTEGER NOT NULL REFERENCES section (section_id),
     status TEXT NOT NULL CHECK (
         status IN (
@@ -210,14 +213,14 @@ CREATE TABLE takes (
 );
 
 CREATE TABLE in_cart (
-    student_id TEXT NOT NULL REFERENCES student (student_id) ON DELETE CASCADE,
+    student_id TEXT NOT NULL REFERENCES student (university_id) ON DELETE CASCADE,
     section_id INTEGER NOT NULL REFERENCES section (section_id) ON DELETE CASCADE,
     PRIMARY KEY (student_id, section_id)
 );
 
 CREATE TABLE registration_request (
     request_id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    student_id TEXT NOT NULL REFERENCES student (student_id),
+    student_id TEXT NOT NULL REFERENCES student (university_id),
     add_section_id INTEGER REFERENCES section (section_id),
     drop_section_id INTEGER REFERENCES section (section_id),
     request_type TEXT NOT NULL CHECK (
@@ -233,7 +236,7 @@ CREATE TABLE registration_request (
     ),
     submitted_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     reviewed_at TIMESTAMPTZ,
-    reviewed_by TEXT REFERENCES admin (admin_id),
+    reviewed_by TEXT REFERENCES admin (university_id),
     admin_note TEXT,
     CHECK (
         (

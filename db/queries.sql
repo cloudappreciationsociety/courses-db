@@ -25,17 +25,17 @@ SELECT s.section_id, s.section_code, s.component, s.instruction_mode, s.status,
     s.time_slot_id AS days,
     to_char(s.start_time, 'HH24:MI') || '-' || to_char(s.end_time, 'HH24:MI') AS time,
     b.name AS building, s.room_number, ca.name AS campus,
-    (i.first_name || ' '  || i.last_name) AS instructor_name,
+    (u.first_name || ' '  || u.last_name) AS instructor_name,
     GREATEST(s.capacity - s.enrolled_count, 0) AS seats_left,
     s.waitlist_count, s.notes
 FROM section s
 LEFT JOIN building b ON b.building_id = s.building_id
 LEFT JOIN campus ca ON ca.campus_id = b.campus_id
 LEFT JOIN teaches t ON t.section_id = s.section_id
-LEFT JOIN instructor i ON i.instructor_id = t.instructor_id
+LEFT JOIN app_user u ON u.university_id = t.instructor_id
 WHERE s.course_id = 'CS-UY 2124'
     AND s.session_id = 'F26'
-GROUP BY s.section_id, b.name, ca.name, i.first_name, i.last_name
+GROUP BY s.section_id, b.name, ca.name, u.first_name, u.last_name
 ORDER BY s.component, s.section_code;
 
 
