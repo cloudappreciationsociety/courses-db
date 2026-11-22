@@ -1,13 +1,27 @@
 import { db } from "@/db";
 
+async function userFromNetId(netId: string) {
+    return await db.query.appUser.findFirst({
+        where: (u, { eq }) => eq(u.netId, netId)
+    });
+}
+
+async function userFromUniversityId(universityId: string) {
+    return await db.query.appUser.findFirst({
+        where: (u, { eq }) => eq(u.universityId, universityId)
+    });
+}
+
 // Returns all sessions, sorted by recency.
-export async function getSessions() {
+async function allSessions() {
     return await db.query.session.findMany({
         orderBy: (s, { desc }) => desc(s.startDate)
     });
 }
 
-export async function getCourses(keywordQuery: string, sessionId: string) {
+export type Session = Awaited<ReturnType<typeof allSessions>>[number];
+
+async function courses(keywordQuery: string, sessionId: string) {
     return await db.query.course.findMany({
         where: (c, { or, ilike }) =>
             keywordQuery ? or(
@@ -30,3 +44,16 @@ export async function getCourses(keywordQuery: string, sessionId: string) {
     });
 
 }
+
+// Course joined with its sections
+export type CourseWithSections = Awaited<ReturnType<typeof courses>>[number];
+
+// Section joined with classroom and instructor
+export type Section = Awaited<ReturnType<typeof courses>>[number]["sections"][number];
+
+export {
+    userFromNetId,
+    userFromUniversityId,
+    allSessions,
+    courses
+};

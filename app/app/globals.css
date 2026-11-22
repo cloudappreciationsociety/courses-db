@@ -71,6 +71,8 @@ h6 {
 :root {
     --background: #ffffff;
     --foreground: #171717;
+
+    --color-muted: #585858;
 }
 
 @media (prefers-color-scheme: dark) {

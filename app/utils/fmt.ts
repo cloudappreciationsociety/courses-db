@@ -1,4 +1,4 @@
-import type { CareerLevel, Semester } from "@/types";
+import type { CareerLevel, Semester, SectionInstructionMode } from "@/types";
 import { timeSlot as ts } from "@/db/schema";
 
 type TimeSlot = typeof ts.$inferSelect;
@@ -13,7 +13,17 @@ export function sessionId(sessionId: string) {
 
 }
 
-export function careerLevel(careerLevel: CareerLevel) {
+const MODE_LABELS: Record<SectionInstructionMode, string> = {
+    in_person: "In-Person",
+    online: "Online",
+    hybrid: "Hybrid",
+};
+
+export function instructionMode(mode: string) {
+    return MODE_LABELS[mode as SectionInstructionMode];
+}
+
+export function careerLevel(careerLevel: string) {
     return capitalizeFirstLetter(careerLevel);
 }
 

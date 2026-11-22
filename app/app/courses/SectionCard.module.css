@@ -1,0 +1,181 @@
+/* One section = one expandable row (<details>). The column layout comes from
+   --section-cols, which the parent list (.sections in page.module.css) defines
+   so the header row and every section row line up. */
+
+.card {
+    border: 1px solid transparent;
+    border-radius: 1rem;
+    overflow: hidden;
+}
+
+.card[open] {
+    border-color: rgba(128, 128, 128, 0.35);
+}
+
+/* ---------- Collapsed row (the <summary>) ---------- */
+
+.row {
+    display: grid;
+    grid-template-columns: var(--section-cols,
+            2.5rem minmax(0, 2.2fr) minmax(0, 2fr) minmax(0, 1.4fr) minmax(0, 1.6fr));
+    align-items: center;
+    padding: 0.75rem 1rem;
+    border-radius: 1rem;
+    cursor: pointer;
+    list-style: none;
+    /* hide the browser's default triangle */
+}
+
+.row::-webkit-details-marker {
+    display: none;
+}
+
+.row:hover {
+    background: rgba(128, 128, 128, 0.1);
+}
+
+.row:focus-visible {
+    outline: 2px solid #2563eb;
+    outline-offset: -2px;
+}
+
+.card[open]>.row {
+    background: rgba(128, 128, 128, 0.2);
+    border-radius: 1rem 1rem 0 0;
+}
+
+.checkbox {
+    width: 1.25rem;
+    height: 1.25rem;
+    margin: 0;
+    accent-color: #2563eb;
+    cursor: pointer;
+}
+
+.name {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-width: 0;
+    font-weight: 500;
+}
+
+/* Chevron drawn with borders: points right when closed, down when open. */
+.chevron {
+    flex: none;
+    width: 0.55rem;
+    height: 0.55rem;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(-45deg);
+    transition: transform 0.15s ease;
+}
+
+.card[open] .chevron {
+    transform: rotate(45deg);
+}
+
+.professor,
+.status,
+.time {
+    min-width: 0;
+}
+
+.status {
+    font-weight: 500;
+}
+
+.status[data-status="open"] {
+    color: #15803d;
+}
+
+.status[data-status="waitlist"] {
+    color: #d97706;
+}
+
+.status[data-status="closed"] {
+    color: #dc2626;
+}
+
+.status[data-status="canceled"] {
+    color: #6b7280;
+    text-decoration: line-through;
+}
+
+/* ---------- Expanded details ---------- */
+
+.body {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem 2rem;
+    margin: 0;
+    padding: 1.25rem 1rem 1.5rem 3.25rem;
+}
+
+.field {
+    min-width: 0;
+}
+
+.wide {
+    grid-column: 1 / -1;
+}
+
+.label {
+    margin: 0;
+    font-size: 0.8rem;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    opacity: 0.6;
+}
+
+.value {
+    margin: 0.15rem 0 0;
+    overflow-wrap: anywhere;
+}
+
+/* ---------- Narrow screens ---------- */
+
+/* Three text columns do not fit on a phone, so each row becomes two lines:
+   checkbox | name | status
+            | time
+   The professor is hidden here because the details repeat it. */
+@media (max-width: 40rem) {
+    .row {
+        grid-template-columns: 2rem minmax(0, 1fr) auto;
+        grid-template-areas:
+            "check name status"
+            ". time time";
+        gap: 0.25rem 0.5rem;
+        padding: 0.75rem;
+    }
+
+    .checkbox {
+        grid-area: check;
+    }
+
+    .name {
+        grid-area: name;
+    }
+
+    .status {
+        grid-area: status;
+        text-align: right;
+    }
+
+    .time {
+        grid-area: time;
+        padding-left: 1.3rem;
+        /* lines up with the name, past the chevron */
+        font-size: 0.9rem;
+        opacity: 0.75;
+    }
+
+    .professor {
+        display: none;
+    }
+
+    .body {
+        grid-template-columns: minmax(0, 1fr);
+        padding-left: 1.5rem;
+    }
+}

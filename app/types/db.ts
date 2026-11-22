@@ -18,3 +18,4 @@ export type SectionEnrollmentStatus = "enrolled" | "dropped" | "waitlisted" | "c
 export type RegistrationRequestType = "enroll" | "swap" | "drop";
 
 export type RegistrationRequestStatus = "pending" | "approved" | "denied" | "waitlisted";
+
