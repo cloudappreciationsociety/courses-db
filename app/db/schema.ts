@@ -1,4 +1,4 @@
-import { pgTable, check, text, integer, date, unique, foreignKey, numeric, boolean, time, timestamp, primaryKey } from "drizzle-orm/pg-core"
+import { pgTable, check, text, integer, date, unique, foreignKey, numeric, boolean, time, timestamp, primaryKey, pgView } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
 
 
@@ -20,17 +20,16 @@ export const school = pgTable("school", {
 	unique("school_name_key").on(table.name),
 ]);
 
-export const department = pgTable("department", {
-	departmentId: text("department_id").primaryKey().notNull(),
+export const subject = pgTable("subject", {
+	subjectId: text("subject_id").primaryKey().notNull(),
 	name: text().notNull(),
 	schoolId: text("school_id").notNull(),
 }, (table) => [
 	foreignKey({
 			columns: [table.schoolId],
 			foreignColumns: [school.schoolId],
-			name: "department_school_id_fkey"
+			name: "subject_school_id_fkey"
 		}),
-	unique("department_name_key").on(table.name),
 ]);
 
 export const appUser = pgTable("app_user", {
@@ -77,12 +76,12 @@ export const course = pgTable("course", {
 	description: text(),
 	requiresDeptConsent: boolean("requires_dept_consent").default(false).notNull(),
 	careerLevel: text("career_level").notNull(),
-	departmentId: text("department_id").notNull(),
+	subjectId: text("subject_id").notNull(),
 }, (table) => [
 	foreignKey({
-			columns: [table.departmentId],
-			foreignColumns: [department.departmentId],
-			name: "course_department_id_fkey"
+			columns: [table.subjectId],
+			foreignColumns: [subject.subjectId],
+			name: "course_subject_id_fkey"
 		}).onUpdate("cascade"),
 	check("course_credits_check", sql`credits > (0)::numeric`),
 	check("course_career_level_check", sql`career_level = ANY (ARRAY['undergrad'::text, 'grad'::text])`),
@@ -172,50 +171,18 @@ export const section = pgTable("section", {
 	check("section_check2", sql`enrolled_count <= capacity`),
 ]);
 
-export const instructor = pgTable("instructor", {
-	universityId: text("university_id").primaryKey().notNull(),
-	departmentId: text("department_id").notNull(),
-}, (table) => [
-	foreignKey({
-			columns: [table.universityId],
-			foreignColumns: [appUser.universityId],
-			name: "instructor_university_id_fkey"
-		}).onDelete("cascade"),
-	foreignKey({
-			columns: [table.departmentId],
-			foreignColumns: [department.departmentId],
-			name: "instructor_department_id_fkey"
-		}).onUpdate("cascade"),
-]);
-
 export const student = pgTable("student", {
 	universityId: text("university_id").primaryKey().notNull(),
 	careerLevel: text("career_level").notNull(),
 	totalCredits: numeric("total_credits", { precision: 5, scale:  1 }).default('0').notNull(),
-	departmentId: text("department_id").notNull(),
 }, (table) => [
 	foreignKey({
 			columns: [table.universityId],
 			foreignColumns: [appUser.universityId],
 			name: "student_university_id_fkey"
 		}).onDelete("cascade"),
-	foreignKey({
-			columns: [table.departmentId],
-			foreignColumns: [department.departmentId],
-			name: "student_department_id_fkey"
-		}).onUpdate("cascade"),
 	check("student_career_level_check", sql`career_level = ANY (ARRAY['undergrad'::text, 'grad'::text])`),
 	check("student_total_credits_check", sql`total_credits >= (0)::numeric`),
-]);
-
-export const admin = pgTable("admin", {
-	universityId: text("university_id").primaryKey().notNull(),
-}, (table) => [
-	foreignKey({
-			columns: [table.universityId],
-			foreignColumns: [appUser.universityId],
-			name: "admin_university_id_fkey"
-		}).onDelete("cascade"),
 ]);
 
 export const registrationRequest = pgTable("registration_request", {
@@ -247,7 +214,7 @@ export const registrationRequest = pgTable("registration_request", {
 		}),
 	foreignKey({
 			columns: [table.reviewedBy],
-			foreignColumns: [admin.universityId],
+			foreignColumns: [appUser.universityId],
 			name: "registration_request_reviewed_by_fkey"
 		}),
 	check("registration_request_request_type_check", sql`request_type = ANY (ARRAY['enroll'::text, 'swap'::text, 'drop'::text])`),
@@ -273,7 +240,7 @@ export const teaches = pgTable("teaches", {
 }, (table) => [
 	foreignKey({
 			columns: [table.instructorId],
-			foreignColumns: [instructor.universityId],
+			foreignColumns: [appUser.universityId],
 			name: "teaches_instructor_id_fkey"
 		}),
 	foreignKey({
@@ -338,3 +305,8 @@ export const takes = pgTable("takes", {
 	check("takes_check", sql`(status = 'waitlisted'::text) = (waitlist_position IS NOT NULL)`),
 	check("takes_check1", sql`(grade IS NULL) OR (status = 'completed'::text)`),
 ]);
+export const instructor = pgView("instructor", {	instructorId: text("instructor_id"),
+}).as(sql`SELECT university_id AS instructor_id FROM app_user WHERE role = 'instructor'::text`);
+
+export const admin = pgView("admin", {	adminId: text("admin_id"),
+}).as(sql`SELECT university_id AS admin_id FROM app_user WHERE role = 'admin'::text`);

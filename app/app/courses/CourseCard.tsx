@@ -1,9 +1,9 @@
 import SectionCard from "./SectionCard";
 import styles from "./CourseCard.module.css";
-import * as queries from "@/lib/queries";
+import type { CourseWithSections } from "@/lib/queries";
 import { fmt } from "@/utils";
 
-export default function CourseCard({ course: c }: { course: queries.CourseWithSections }) {
+export default function CourseCard({ course: c }: { course: CourseWithSections }) {
     return (
         <article className={styles.card}>
             <header className={styles.cardHeader}>
@@ -12,7 +12,7 @@ export default function CourseCard({ course: c }: { course: queries.CourseWithSe
                     {c.title}
                 </h2>
                 <ul className={styles.facts}>
-                    <li>{c.department.name}</li>
+                    <li>{c.subject.name}</li>
                     <li>{c.credits} credits</li>
                     <li>{fmt.careerLevel(c.careerLevel)}</li>
                     {c.requiresDeptConsent && <li>Department consent required</li>}
@@ -29,7 +29,7 @@ export default function CourseCard({ course: c }: { course: queries.CourseWithSe
                     <div className={styles.sectionHeader}>
                         <span />
                         <span className={styles.sectionCol}>Sections</span>
-                        <span>Professor</span>
+                        <span>Instructor</span>
                         <span>Status</span>
                         <span>Time</span>
                     </div>

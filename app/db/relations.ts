@@ -1,18 +1,16 @@
 import { relations } from "drizzle-orm/relations";
-import { school, department, campus, building, course, prerequisite, gradeScale, timeSlot, section, session, classroom, appUser, instructor, student, admin, registrationRequest, teaches, inCart, takes } from "./schema";
+import { school, subject, campus, building, course, prerequisite, gradeScale, timeSlot, section, session, classroom, appUser, student, registrationRequest, teaches, inCart, takes } from "./schema";
 
-export const departmentRelations = relations(department, ({one, many}) => ({
+export const subjectRelations = relations(subject, ({one, many}) => ({
 	school: one(school, {
-		fields: [department.schoolId],
+		fields: [subject.schoolId],
 		references: [school.schoolId]
 	}),
 	courses: many(course),
-	instructors: many(instructor),
-	students: many(student),
 }));
 
 export const schoolRelations = relations(school, ({many}) => ({
-	departments: many(department),
+	subjects: many(subject),
 }));
 
 export const buildingRelations = relations(building, ({one, many}) => ({
@@ -28,9 +26,9 @@ export const campusRelations = relations(campus, ({many}) => ({
 }));
 
 export const courseRelations = relations(course, ({one, many}) => ({
-	department: one(department, {
-		fields: [course.departmentId],
-		references: [department.departmentId]
+	subject: one(subject, {
+		fields: [course.subjectId],
+		references: [subject.subjectId]
 	}),
 	prerequisites_courseId: many(prerequisite, {
 		relationName: "prerequisite_courseId_course_courseId"
@@ -115,44 +113,20 @@ export const classroomRelations = relations(classroom, ({one, many}) => ({
 	}),
 }));
 
-export const instructorRelations = relations(instructor, ({one, many}) => ({
-	appUser: one(appUser, {
-		fields: [instructor.universityId],
-		references: [appUser.universityId]
-	}),
-	department: one(department, {
-		fields: [instructor.departmentId],
-		references: [department.departmentId]
-	}),
-	teaches: many(teaches),
-}));
-
-export const appUserRelations = relations(appUser, ({many}) => ({
-	instructors: many(instructor),
-	students: many(student),
-	admins: many(admin),
-}));
-
 export const studentRelations = relations(student, ({one, many}) => ({
 	appUser: one(appUser, {
 		fields: [student.universityId],
 		references: [appUser.universityId]
-	}),
-	department: one(department, {
-		fields: [student.departmentId],
-		references: [department.departmentId]
 	}),
 	registrationRequests: many(registrationRequest),
 	inCarts: many(inCart),
 	takes: many(takes),
 }));
 
-export const adminRelations = relations(admin, ({one, many}) => ({
-	appUser: one(appUser, {
-		fields: [admin.universityId],
-		references: [appUser.universityId]
-	}),
+export const appUserRelations = relations(appUser, ({many}) => ({
+	students: many(student),
 	registrationRequests: many(registrationRequest),
+	teaches: many(teaches),
 }));
 
 export const registrationRequestRelations = relations(registrationRequest, ({one}) => ({
@@ -170,16 +144,16 @@ export const registrationRequestRelations = relations(registrationRequest, ({one
 		references: [section.sectionId],
 		relationName: "registrationRequest_dropSectionId_section_sectionId"
 	}),
-	admin: one(admin, {
+	appUser: one(appUser, {
 		fields: [registrationRequest.reviewedBy],
-		references: [admin.universityId]
+		references: [appUser.universityId]
 	}),
 }));
 
 export const teachesRelations = relations(teaches, ({one}) => ({
-	instructor: one(instructor, {
+	appUser: one(appUser, {
 		fields: [teaches.instructorId],
-		references: [instructor.universityId]
+		references: [appUser.universityId]
 	}),
 	section: one(section, {
 		fields: [teaches.sectionId],

@@ -43,10 +43,10 @@ VALUES
     ('COURANT', 'Courant Institute School of Mathematics, Computing, and Data Science');
 
 INSERT INTO
-    department (department_id, name, school_id)
-VALUES 
-    ('CS', 'Computer Science', 'TANDON'),
-    ('MA', 'Mathematics', 'TANDON');
+    subject (subject_id, name, school_id)
+VALUES
+    ('CS-UY', 'Computer Science', 'TANDON'),
+    ('MA-UY', 'Mathematics', 'TANDON');
 
 INSERT INTO
     session (session_id, semester, year, start_date, end_date)
@@ -85,28 +85,28 @@ INSERT INTO
     course (
         course_id, title, credits,
         description,
-        requires_dept_consent, career_level, department_id
+        requires_dept_consent, career_level, subject_id
     )
 VALUES 
     (
         'CS-UY 3083', 'Introduction to Databases', 3.0,
         'This course introduces database systems and their approach as a mechanism to model the real world. The course covers data models (relational, object-oriented), physical database design, query languages, query processing and optimization, as well as transaction management techniques. Implementation issues, object oriented and distributed databases also are introduced.',
-        false, 'undergrad', 'CS'
+        false, 'undergrad', 'CS-UY'
     ),
     (
         'CS-UY 1134', 'Data Structures and Algorithms', 4.0,
         'This course covers abstract data types and the implementation and use of standard data structures along with fundamental algorithms and the basics of algorithm analysis.',
-        false, 'undergrad', 'CS'
+        false, 'undergrad', 'CS-UY'
     ),
     (
         'CS-UY 2124', 'Object Oriented Programming', 4.0,
         'This intermediate-level programming course teaches object-oriented programming in C++. Topics: Pointers, dynamic memory allocation and recursion. Classes and objects including constructors, destructors, methods (member functions) and data members. Access and the interface to relationships of classes including composition, association and inheritance. Polymorphism through function overloading operators. Inheritance and templates. Use of the standard template library containers and algorithms.',
-        false, 'undergrad', 'CS'
+        false, 'undergrad', 'CS-UY'
     ),
     (
         'MA-UY 2314', 'Discrete Mathematics', 4.0,
         'Logic, proofs, set theory, functions, relations, asymptotic notation, recurrences, modeling computation, graph theory.',
-        false, 'undergrad', 'MA'
+        false, 'undergrad', 'MA-UY'
     );
 
 INSERT INTO
@@ -251,30 +251,14 @@ RETURNS INTEGER LANGUAGE sql STABLE AS $$
       AND session_id = p_session;
 $$;
 
--- People
 INSERT INTO
-    instructor (university_id, department_id)
+    student (university_id, career_level, total_credits)
 VALUES 
-    ('N64820584', 'CS'),
-    ('N29842114', 'CS'),
-    ('N19342150', 'CS'),
-    ('N19332159', 'MA'),
-    ('N69332159', 'MA');
-
-INSERT INTO
-    student (university_id, career_level, total_credits, department_id)
-VALUES 
-    ('N00000001', 'undergrad', 62.0, 'CS'),
-    ('N00000002', 'undergrad', 58.0, 'CS'),
-    ('N00000003', 'undergrad', 12.0, 'CS'),
-    ('N00000004', 'grad', 12.0, 'CS'),
-    ('N00000005', 'undergrad', 6.0, 'MA');
-
-INSERT INTO
-    admin (university_id)
-VALUES 
-    ('N10000000'),
-    ('N10000001');
+    ('N00000001', 'undergrad', 62.0),
+    ('N00000002', 'undergrad', 58.0),
+    ('N00000003', 'undergrad', 12.0),
+    ('N00000004', 'grad', 12.0),
+    ('N00000005', 'undergrad', 6.0);
 
 INSERT INTO
     teaches (instructor_id, section_id)

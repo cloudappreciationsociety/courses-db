@@ -1,11 +1,11 @@
-import { verifySession } from "@/lib/dal";
-import { logout } from "../login/actions";
 import styles from "./page.module.css";
+import { verifySession } from "@/lib/dal";
 import type { TimeString, Day } from "@/types";
 import { Suspense } from "react";
 import * as queries from "@/lib/queries";
-import SectionCard from "./SectionCard";
 import CourseCard from "./CourseCard";
+import CourseSearch from "./CourseSearch";
+import UserStatus from "./UserStatus";
 
 type SearchParams = {
     keywordQuery?: string;
@@ -22,52 +22,63 @@ function getDefaultSessionId(sessions: queries.Session[]) {
     return upcoming?.sessionId ?? sessions[0]?.sessionId ?? "";
 }
 
-async function CoursesContent({ searchParamsPromise }: { searchParamsPromise: Promise<SearchParams> }) {
-    const auth = await verifySession();
-
+async function Search() {
     const sessions = await queries.allSessions();
 
-    const searchParams = await searchParamsPromise;
-    const { keywordQuery = "" } = searchParams;
-    // If no session was provided, use the current or latest session.
-    const sessionId = searchParams.session ?? getDefaultSessionId(sessions);
+    return (
+        <CourseSearch
+            sessions={sessions}
+            defaultSessionId={getDefaultSessionId(sessions)}
+        />
+    );
+}
 
-    const me = await queries.userFromNetId(auth.universityId!);
-    const courses = await queries.courses(keywordQuery, sessionId);
+async function normalizeSearchParams(searchParamsPromise: Promise<SearchParams>) {
+    const searchParams = await searchParamsPromise;
+
+    if (!searchParams.keywordQuery) {
+        searchParams.keywordQuery = "";
+    }
+
+    if (!searchParams.session) {
+        const sessions = await queries.allSessions();
+        searchParams.session = getDefaultSessionId(sessions);
+    }
+
+    return searchParams
+}
+
+function LoadingCourseList() {
+    return (<p className={styles.muted}>Loading courses...</p>);
+}
+
+async function CourseList({ searchParamsPromise }: { searchParamsPromise: Promise<SearchParams> }) {
+    const searchParams = await normalizeSearchParams(searchParamsPromise);
+    const courses = await queries.courses(searchParams.keywordQuery!, searchParams.session!);
+
+    if (courses.length === 0) {
+        return (
+            <p>No courses found.</p>
+        );
+    }
 
     return (
-        <>
-            <form action={logout}>
-                <button className={styles.signOut}>
-                    Sign out ({me ? `${me.firstName} ${me.lastName}` : auth.universityId}, {auth.role})
-                </button>
-            </form>
+        courses.filter((c) => c.sections.length > 0).map((c) => <CourseCard key={c.courseId} course={c} />)
+    );
+}
 
-            <form className={styles.search} method="GET">
-                <input
-                    name="keywordQuery"
-                    defaultValue={keywordQuery}
-                    placeholder="Search title or course code"
-                    className={styles.searchInput}
-                />
-                <select name="session" defaultValue={sessionId} className={styles.select}>
-                    {sessions.map((s) => (
-                        <option key={s.sessionId} value={s.sessionId}>
-                            {s.semester} {s.year}
-                        </option>
-                    ))}
-                </select>
-                <button className={styles.searchButton}>Search</button>
-            </form>
+function LoadingCart() {
+    return (<p className={styles.muted}>Loading cart...</p>);
+}
 
-            {courses.length === 0 && <p>No courses match.</p>}
+async function Cart() {
+    const auth = await verifySession();
+    const coursesInCart = await queries.cart(auth.universityId!)
 
-            {
-                courses.map((c) => (
-                    <CourseCard key={c.courseId} course={c} />
-                ))
-            }
-        </>
+    return (
+        <div>
+            <p>Hi</p>
+        </div>
     );
 }
 
@@ -79,10 +90,27 @@ export default function CoursesPage({
     return (
         <main className={styles.page}>
             <h1 className={styles.title}>Course Catalog</h1>
-
-            <Suspense fallback={<div>Loading courses...</div>}>
-                <CoursesContent searchParamsPromise={searchParams} />
+            <Suspense>
+                <UserStatus />
             </Suspense>
+
+            <div className={styles.mainContent}>
+                <div className={styles.leftContainer}>
+                    <Suspense>
+                        <Search />
+                    </Suspense>
+
+                    <Suspense fallback={<LoadingCart />}>
+                        <Cart />
+                    </Suspense>
+                </div>
+
+                <div className={styles.rightContainer}>
+                    <Suspense fallback={<LoadingCourseList />}>
+                        <CourseList searchParamsPromise={searchParams} />
+                    </Suspense>
+                </div>
+            </div>
         </main>
     );
 }

@@ -12,6 +12,7 @@ export async function proxy(req: NextRequest) {
     if (session && onLogin) {
         return NextResponse.redirect(new URL("/courses", req.nextUrl));
     }
+
     return NextResponse.next();
 }
 

@@ -1,3 +1,5 @@
+SET search_path TO public;
+
 CREATE TABLE app_user (
     university_id TEXT PRIMARY KEY,
     net_id TEXT  NOT NULL UNIQUE,
@@ -17,9 +19,9 @@ CREATE TABLE school (
     name TEXT NOT NULL UNIQUE
 );
 
-CREATE TABLE department (
-    department_id TEXT PRIMARY KEY,
-    name TEXT NOT NULL UNIQUE,
+CREATE TABLE subject (
+    subject_id TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
     school_id TEXT NOT NULL REFERENCES school (school_id)
 );
 
@@ -59,7 +61,7 @@ CREATE TABLE course (
     career_level TEXT NOT NULL CHECK (
         career_level IN ('undergrad', 'grad')
     ),
-    department_id TEXT NOT NULL REFERENCES department (department_id) ON UPDATE CASCADE
+    subject_id TEXT NOT NULL REFERENCES subject (subject_id) ON UPDATE CASCADE
 );
 
 CREATE TABLE prerequisite (
@@ -163,13 +165,18 @@ CREATE TABLE section (
     CHECK (enrolled_count <= capacity)
 );
 
-CREATE TABLE instructor (
-    university_id TEXT PRIMARY KEY REFERENCES app_user (university_id) ON DELETE CASCADE,
-    department_id TEXT NOT NULL REFERENCES department (department_id) ON UPDATE CASCADE
-);
+CREATE VIEW instructor AS
+    SELECT university_id AS instructor_id
+    FROM app_user
+    WHERE role = 'instructor';
+
+CREATE VIEW admin AS
+    SELECT university_id AS admin_id
+    FROM app_user
+    WHERE role = 'admin';
 
 CREATE TABLE teaches (
-    instructor_id TEXT NOT NULL REFERENCES instructor (university_id),
+    instructor_id TEXT NOT NULL REFERENCES app_user (university_id),
     section_id INTEGER NOT NULL REFERENCES section (section_id),
     PRIMARY KEY (instructor_id, section_id)
 );
@@ -179,12 +186,7 @@ CREATE TABLE student (
     career_level TEXT NOT NULL CHECK (
         career_level IN ('undergrad', 'grad')
     ),
-    total_credits NUMERIC(5, 1) NOT NULL DEFAULT 0 CHECK (total_credits >= 0),
-    department_id TEXT NOT NULL REFERENCES department (department_id) ON UPDATE CASCADE
-);
-
-CREATE TABLE admin (
-    university_id TEXT PRIMARY KEY REFERENCES app_user (university_id) ON DELETE CASCADE
+    total_credits NUMERIC(5, 1) NOT NULL DEFAULT 0 CHECK (total_credits >= 0)
 );
 
 CREATE TABLE takes (
@@ -236,7 +238,7 @@ CREATE TABLE registration_request (
     ),
     submitted_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     reviewed_at TIMESTAMPTZ,
-    reviewed_by TEXT REFERENCES admin (university_id),
+    reviewed_by TEXT REFERENCES app_user (university_id),
     admin_note TEXT,
     CHECK (
         (
