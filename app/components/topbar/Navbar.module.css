@@ -12,6 +12,7 @@
 }
 
 .navLink {
+    border-radius: 0.5rem;
     padding: 0.5rem;
     color: inherit;
     text-decoration: underline;

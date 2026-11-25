@@ -83,7 +83,6 @@ export default function CoursesPage({
             <Topbar />
             <h1 className={styles.title}>Course Catalog</h1>
 
-
             <div className={styles.mainContent}>
                 <div className={styles.leftContainer}>
                     <Suspense>

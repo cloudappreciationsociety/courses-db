@@ -1,11 +1,12 @@
 import Link from "next/link";
 import { Suspense } from "react";
-import CourseCard from "@/components/shared/CourseCard";
 import { requireStudentId } from "@/lib/dal";
 import * as queries from "@/lib/queries";
-import Topbar from "@/components/topbar/Topbar"; // adjust if you moved it
+import Topbar from "@/components/topbar/Topbar";
 import SessionTabs from "./SessionTabs";
 import styles from "./page.module.css";
+import TakenCourseCard from "./TakenCourseCard";
+import EnrollingCourseCard from "./EnrollingCourseCard";
 
 type SearchParams = { session?: string };
 
@@ -46,9 +47,11 @@ async function SessionSchedule({
                             {courses.length} {courses.length === 1 ? "course" : "courses"} · {totalCredits(courses)} credits
                         </span>
                     </header>
-                    {courses.map((c) => (
-                        <CourseCard key={c.courseId} course={c} />
-                    ))}
+                    <div className={styles.courses}>
+                        {courses.map((c) => (
+                            <TakenCourseCard key={c.courseId} course={c} />
+                        ))}
+                    </div>
                 </section>
             )}
 
@@ -69,7 +72,7 @@ async function SessionSchedule({
                         <>
                             <p className={styles.note}>These sections are in your cart but you have not enrolled in them yet.</p>
                             {cartCourses.map((c) => (
-                                <CourseCard key={c.courseId} course={c} />
+                                <EnrollingCourseCard key={c.courseId} course={c} />
                             ))}
                         </>
                     )}
@@ -95,7 +98,6 @@ async function ScheduleContent({ searchParamsPromise }: { searchParamsPromise: P
         <>
             <SessionTabs sessions={sessions} selectedId={selected.sessionId} />
 
-            {/* The key shows the fallback again when switching tabs, while the tab bar stays put. */}
             <Suspense key={selected.sessionId} fallback={<LoadingSession />}>
                 <SessionSchedule
                     studentId={studentId}
@@ -111,11 +113,14 @@ export default function SchedulePage({ searchParams }: { searchParams: Promise<S
     return (
         <main className={styles.page}>
             <Topbar />
-            <h1 className={styles.title}>My Schedule</h1>
 
-            <Suspense fallback={<LoadingSession />}>
-                <ScheduleContent searchParamsPromise={searchParams} />
-            </Suspense>
+            <div className={styles.mainContent}>
+                <h1 className={styles.title}>My Schedule</h1>
+
+                <Suspense fallback={<LoadingSession />}>
+                    <ScheduleContent searchParamsPromise={searchParams} />
+                </Suspense>
+            </div>
         </main>
     );
 }

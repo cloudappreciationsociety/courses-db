@@ -19,20 +19,16 @@ export default function Navbar() {
 
     return (
         <nav className={styles.nav}>
-            {navLinks.map((link) => {
-                const active = isActive(link.href);
-
-                return (
-                    <Link
-                        key={link.href}
-                        href={link.href}
-                        aria-current={active ? "page" : undefined}
-                        className={styles.navLink}
-                    >
-                        {link.label}
-                    </Link>
-                );
-            })}
+            {navLinks.map((link) => (
+                <Link
+                    key={link.href}
+                    href={link.href}
+                    aria-current={isActive(link.href) ? "page" : undefined}
+                    className={styles.navLink}
+                >
+                    {link.label}
+                </Link>
+            ))}
         </nav>
     );
 }

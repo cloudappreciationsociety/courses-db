@@ -73,3 +73,15 @@ export function timeSlot(timeSlot: TimeSlot) {
 export function userRole(role: string) {
     return capitalizeFirstLetter(role);
 }
+
+export function instructors(s: SectionWithDetails) {
+    return s.teaches
+        .map(({ appUser: u }) => `${u.lastName}, ${u.firstName}`)
+        .join("; ") || "TBA";
+}
+
+export function room(s: SectionWithDetails) {
+    return s.classroom
+        ? `${s.classroom.building.name} Room ${s.classroom.roomNumber}`
+        : "Online";
+}

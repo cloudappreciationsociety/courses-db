@@ -7,6 +7,7 @@ import { addToCart } from "@/app/courses/actions";
 import SectionCard from "./SectionCard";
 import styles from "./CourseCard.module.css";
 import { Icon } from "@iconify/react";
+import { cmp } from "@/utils";
 
 function CartButton() {
     const { pending } = useFormStatus();
@@ -23,6 +24,32 @@ function CartButton() {
     );
 }
 
+export function CourseTitle({ course: c, showCredits = true }: { course: CourseWithSections, showCredits?: boolean }) {
+    return (
+        <h2 className={styles.courseTitle}>
+            <span className={styles.courseCode}>
+                {c.courseId} {showCredits && <span className={styles.courseCredits}>({c.credits})</span>}
+            </span>
+            <span className={styles.courseName}>{c.title}</span>
+        </h2>
+    )
+}
+
+export function SectionTable({ columnNames, children }: { columnNames: string[], children: React.ReactNode[] }) {
+    return (
+        <div className={styles.sections}>
+            <div className={styles.sectionHeader}>
+                <span />
+                <span className={styles.sectionCol}>Section</span>
+                {columnNames.map((name) => <span key={name}>{name}</span>)}
+            </div>
+            <div className={styles.sectionList}>
+                {children}
+            </div>
+        </div>
+    );
+}
+
 export default function CourseCard({ course: c }: { course: CourseWithSections }) {
     const [isExpanded, setIsExpanded] = useState(false);
 
@@ -30,12 +57,7 @@ export default function CourseCard({ course: c }: { course: CourseWithSections }
         <article className={styles.card}>
             <form action={addToCart}>
                 <header className={`${styles.cardHeader} ${isExpanded ? styles.headerExpanded : ""}`}>
-                    <h2 className={styles.courseTitle}>
-                        <span className={styles.courseCode}>
-                            {c.courseId} <span className={styles.courseCredits}>({c.credits})</span>
-                        </span>
-                        <span className={styles.courseName}>{c.title}</span>
-                    </h2>
+                    <CourseTitle course={c} />
 
                     {isExpanded && c.description && <p className={styles.description}>{c.description}</p>}
 
@@ -57,18 +79,11 @@ export default function CourseCard({ course: c }: { course: CourseWithSections }
                     (c.sections.length === 0 ? (
                         <p className={styles.empty}>No sections this session.</p>
                     ) : (
-                        <div className={styles.sections}>
-                            <div className={styles.sectionHeader}>
-                                <span />
-                                <span className={styles.sectionCol}>Sections</span>
-                                <span>Instructor</span>
-                                <span>Status</span>
-                                <span>Time</span>
-                            </div>
-                            {c.sections.map((s) => (
+                        <SectionTable columnNames={["Instructor", "Status", "Time"]}>
+                            {c.sections.toSorted(cmp.section).map((s) => (
                                 <SectionCard key={s.sectionId} section={s} />
                             ))}
-                        </div>
+                        </SectionTable>
                     ))
                 }
             </form>

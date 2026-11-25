@@ -1,0 +1,95 @@
+.card {
+    --course-accent: #474747;
+    --course-ink: #ffffff;
+
+    margin-bottom: 1rem;
+    border: 1px solid var(--border, rgba(128, 128, 128, 0.35));
+    border-radius: var(--radius, 1rem);
+    overflow: hidden;
+}
+
+.header {
+    padding: 0.75rem 1rem;
+    background: var(--course-accent);
+    color: var(--course-ink);
+}
+
+.heading {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.25rem 0.75rem;
+    margin: 0;
+    line-height: 1.25;
+}
+
+.code {
+    font-size: 1.125rem;
+    font-weight: 600;
+}
+
+.credits {
+    font-size: 0.95rem;
+    font-weight: 400;
+}
+
+.title {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+/* ---------- Sections ---------- */
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.columns th {
+    padding: 0.5rem 0.75rem;
+    text-align: left;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    opacity: 0.65;
+}
+
+.row {
+    border-top: 1px solid var(--border-subtle, rgba(128, 128, 128, 0.25));
+}
+
+.row>th,
+.row>td {
+    padding: 0.6rem 0.75rem;
+    text-align: left;
+    vertical-align: top;
+    white-space: pre-line;
+}
+
+.name {
+    font-weight: 600;
+}
+
+.status {
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.status[data-status="open"] {
+    color: #15803d;
+}
+
+.status[data-status="waitlist"] {
+    color: #d97706;
+}
+
+.status[data-status="closed"] {
+    color: #dc2626;
+}
+
+.status[data-status="canceled"] {
+    color: #6b7280;
+    text-decoration: line-through;
+}

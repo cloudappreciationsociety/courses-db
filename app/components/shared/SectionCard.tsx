@@ -3,13 +3,8 @@ import * as queries from "@/lib/queries";
 import styles from "./SectionCard.module.css";
 
 export default function SectionCard({ section: s }: { section: queries.SectionWithDetails }) {
-    const instructors =
-        s.teaches
-            .map(({ appUser: u }) => `${u.lastName}, ${u.firstName}`)
-            .join("; ") || "TBA";
-    const room = s.classroom
-        ? `${s.classroom.building.name} Room ${s.classroom.roomNumber}`
-        : "Online";
+    const instructors = fmt.instructors(s);
+    const room = fmt.room(s);
     const seatsLeft = Math.max(s.capacity - s.enrolledCount, 0);
 
     return (
@@ -21,11 +16,15 @@ export default function SectionCard({ section: s }: { section: queries.SectionWi
                     <span className={styles.chevron} aria-hidden="true" />
                     {fmt.sectionTitle(s)}
                 </span>
-                <span className={styles.professor}>{instructors}</span>
+                <span>
+                    {instructors}
+                </span>
                 <span className={styles.status} data-status={s.status}>
                     {fmt.sectionStatusLabel(s)}
                 </span>
-                <span className={styles.time}>{fmt.timeSlot(s)}</span>
+                <span>
+                    {fmt.timeSlot(s)}
+                </span>
             </summary>
 
             <dl className={styles.body}>
@@ -54,7 +53,7 @@ export default function SectionCard({ section: s }: { section: queries.SectionWi
                     </dd>
                 </div>
                 {s.notes && (
-                    <div className={`${styles.field} ${styles.wide}`}>
+                    <div className={`${styles.field} ${styles.notes}`}>
                         <dt className={styles.label}>Notes</dt>
                         <dd className={styles.value}>{s.notes}</dd>
                     </div>
