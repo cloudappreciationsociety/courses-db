@@ -1,0 +1,23 @@
+.title {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.nav {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+}
+
+.navLink {
+    padding: 0.5rem;
+    color: inherit;
+    text-decoration: underline;
+}
+
+.navLink[aria-current="page"] {
+    text-decoration: none;
+    background-color: #474747;
+}

@@ -5,7 +5,6 @@ import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import styles from "./CourseSearch.module.css";
 import { useFormStatus } from "react-dom";
-import type { Session } from "@/lib/queries";
 import { fmt } from "@/utils";
 
 function SearchButton({ className }: { className?: string }) {
@@ -17,19 +16,10 @@ function SearchButton({ className }: { className?: string }) {
     );
 }
 
-export default function SearchForm({
-    sessions,
-    defaultSessionId,
-}: {
-    sessions: Session[];
-    defaultSessionId: string;
-}) {
+export default function SearchForm() {
     const params = useSearchParams();
 
     const [query, setQuery] = useState(() => params.get("keywordQuery") ?? "");
-    const [sessionId, setSessionId] = useState(
-        () => params.get("session") ?? defaultSessionId
-    );
 
     return (
         <Form action="/courses" className={styles.search}>
@@ -40,18 +30,6 @@ export default function SearchForm({
                 placeholder="Search title or course code"
                 className={styles.searchInput}
             />
-            <select
-                name="session"
-                value={sessionId}
-                onChange={(e) => setSessionId(e.target.value)}
-                className={styles.select}
-            >
-                {sessions.map((s) => (
-                    <option key={s.sessionId} value={s.sessionId}>
-                        {fmt.sessionLabel(s)}
-                    </option>
-                ))}
-            </select>
             <SearchButton className={styles.searchButton} />
         </Form>
     );

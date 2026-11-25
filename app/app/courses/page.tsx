@@ -3,9 +3,10 @@ import { verifySession } from "@/lib/dal";
 import type { TimeString, Day } from "@/types";
 import { Suspense } from "react";
 import * as queries from "@/lib/queries";
-import CourseCard from "./CourseCard";
+import CourseCard from "@/components/shared/CourseCard";
+import Cart from "./Cart";
 import CourseSearch from "./CourseSearch";
-import UserStatus from "./UserStatus";
+import Topbar from "@/components/topbar/Topbar";
 
 type SearchParams = {
     keywordQuery?: string;
@@ -17,20 +18,9 @@ type SearchParams = {
 
 function getDefaultSessionId(sessions: queries.Session[]) {
     const today = new Date().toISOString().slice(0, 10);
-    const upcoming = sessions.findLast((s) => s.endDate >= today);
+    const upcoming = sessions.find((s) => s.endDate >= today);
 
     return upcoming?.sessionId ?? sessions[0]?.sessionId ?? "";
-}
-
-async function Search() {
-    const sessions = await queries.allSessions();
-
-    return (
-        <CourseSearch
-            sessions={sessions}
-            defaultSessionId={getDefaultSessionId(sessions)}
-        />
-    );
 }
 
 async function normalizeSearchParams(searchParamsPromise: Promise<SearchParams>) {
@@ -52,7 +42,7 @@ function LoadingCourseList() {
     return (<p className={styles.muted}>Loading courses...</p>);
 }
 
-async function CourseList({ searchParamsPromise }: { searchParamsPromise: Promise<SearchParams> }) {
+async function AsyncCourseList({ searchParamsPromise }: { searchParamsPromise: Promise<SearchParams> }) {
     const searchParams = await normalizeSearchParams(searchParamsPromise);
     const courses = await queries.courses(searchParams.keywordQuery!, searchParams.session!);
 
@@ -71,15 +61,16 @@ function LoadingCart() {
     return (<p className={styles.muted}>Loading cart...</p>);
 }
 
-async function Cart() {
+async function AsyncCart() {
     const auth = await verifySession();
-    const coursesInCart = await queries.cart(auth.universityId!)
+    // Only students have a cart.
+    if (auth.role !== "student") {
+        return null;
+    }
 
-    return (
-        <div>
-            <p>Hi</p>
-        </div>
-    );
+    const coursesInCart = await queries.cart(auth.universityId!);
+
+    return <Cart courses={coursesInCart} />;
 }
 
 export default function CoursesPage({
@@ -89,25 +80,24 @@ export default function CoursesPage({
 }) {
     return (
         <main className={styles.page}>
+            <Topbar />
             <h1 className={styles.title}>Course Catalog</h1>
-            <Suspense>
-                <UserStatus />
-            </Suspense>
+
 
             <div className={styles.mainContent}>
                 <div className={styles.leftContainer}>
                     <Suspense>
-                        <Search />
+                        <CourseSearch />
                     </Suspense>
 
                     <Suspense fallback={<LoadingCart />}>
-                        <Cart />
+                        <AsyncCart />
                     </Suspense>
                 </div>
 
                 <div className={styles.rightContainer}>
                     <Suspense fallback={<LoadingCourseList />}>
-                        <CourseList searchParamsPromise={searchParams} />
+                        <AsyncCourseList searchParamsPromise={searchParams} />
                     </Suspense>
                 </div>
             </div>

@@ -1,0 +1,166 @@
+.card {
+    --course-accent: #474747;
+    /* course header colour; override per school/department */
+    --course-ink: #ffffff;
+    /* icon colour on the header */
+
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+}
+
+/* ---------- Header (always visible) ---------- */
+
+.cardHeader {
+    position: relative;
+    padding: 1.25rem 4.5rem 1.25rem 1.5rem;
+    background: var(--course-accent);
+    color: #ffffff;
+}
+
+/* Leaves room for the expand and cart buttons stacked on the right. */
+.headerExpanded {
+    min-height: 8rem;
+}
+
+.courseTitle {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+
+    margin: 0;
+    line-height: 1.25;
+}
+
+.courseCode {
+    font-size: 1.5rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.courseName {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.courseCredits {
+    font-size: 1rem;
+    font-weight: 400;
+}
+
+.description {
+    margin: 0.75rem 0 0;
+    line-height: 1.5;
+    font-size: 0.85rem;
+}
+
+/* ---------- Round buttons, top right: expand on top, cart underneath ---------- */
+
+.actions {
+    position: absolute;
+    top: 1rem;
+    right: 1.25rem;
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 0.5rem;
+}
+
+.expandButton,
+.cartButton {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
+    border: 2px solid var(--course-ink);
+    border-radius: 50%;
+    background: transparent;
+    color: var(--course-ink);
+    cursor: pointer;
+}
+
+.expandButton:hover,
+.cartButton:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.expandButton:focus-visible,
+.cartButton:focus-visible {
+    outline: 2px solid var(--action);
+    outline-offset: 2px;
+}
+
+.cartButton:disabled {
+    opacity: 0.5;
+    cursor: progress;
+}
+
+/* Chevron drawn with borders: points down when collapsed, up when expanded. */
+.chevron {
+    width: 0.7rem;
+    height: 0.7rem;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: translateY(-2px) rotate(45deg);
+    transition: transform 0.15s ease;
+}
+
+.expandButton[aria-expanded="true"] .chevron {
+    transform: translateY(2px) rotate(-135deg);
+}
+
+/* ---------- Section list (only rendered while expanded) ---------- */
+
+.empty {
+    margin: 0;
+    padding: 1rem 1.5rem;
+    font-size: 0.875rem;
+    opacity: 0.6;
+}
+
+/* The column template is shared with every SectionCard row through this
+   custom property, so the header labels line up with the rows. */
+.sections {
+    --section-cols: 2.5rem minmax(0, 2.2fr) minmax(0, 2fr) minmax(0, 1.4fr) minmax(0, 1.6fr);
+
+    padding: 0.25rem 1rem 1rem;
+}
+
+.sectionHeader {
+    display: grid;
+    grid-template-columns: var(--section-cols);
+    align-items: center;
+    margin-bottom: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-bottom: 2px solid var(--border-subtle);
+    font-size: 0.875rem;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    opacity: 0.75;
+}
+
+/* "Sections" label lines up with the row names, past the checkbox column's chevron. */
+.sectionCol {
+    padding-left: 1.5rem;
+}
+
+/* ---------- Narrow screens ---------- */
+
+@media (max-width: 40rem) {
+    .cardHeader {
+        padding-right: 4.25rem;
+    }
+
+    .sections {
+        padding: 0.5rem 0.5rem 0.75rem;
+    }
+
+    /* Rows switch to a two-line layout (see SectionCard.module.css),
+       so the column labels no longer apply. */
+    .sectionHeader {
+        display: none;
+    }
+}

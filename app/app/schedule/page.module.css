@@ -1,0 +1,89 @@
+/* Tokens used by CourseCard and SectionCard (the courses page defines the same ones). */
+.page {
+    --border: rgba(128, 128, 128, 0.35);
+    --border-subtle: rgba(128, 128, 128, 0.25);
+    --radius: 1rem;
+    --action: #2563eb;
+
+    width: var(--page-width);
+    margin: 0 auto;
+    padding: 1.5rem;
+}
+
+.title {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.block {
+    margin-top: 1.5rem;
+}
+
+.blockHeader {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+}
+
+.blockTitle {
+    margin: 0;
+    font-size: 1.125rem;
+    font-weight: 600;
+}
+
+.summary {
+    font-size: 0.875rem;
+    opacity: 0.7;
+}
+
+.note {
+    margin: 0 0 0.75rem;
+    font-size: 0.875rem;
+    opacity: 0.7;
+}
+
+.muted {
+    margin: 1rem 0 0;
+    opacity: 0.6;
+}
+
+/* Shown when the shopping cart has nothing in it. */
+.emptyCart {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1.25rem;
+    border: 1px dashed var(--border);
+    border-radius: var(--radius);
+}
+
+.emptyCart p {
+    margin: 0;
+    opacity: 0.8;
+}
+
+.button {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    background: var(--action);
+    color: #fff;
+    font-size: 0.9rem;
+    text-decoration: none;
+}
+
+.button:focus-visible,
+.navLink:focus-visible {
+    outline: 2px solid var(--action);
+    outline-offset: 2px;
+}
+
+@media (max-width: 40rem) {
+    .page {
+        padding: 1rem;
+    }
+}

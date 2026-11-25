@@ -1,5 +1,5 @@
 import { verifySession } from "@/lib/dal";
-import { logout } from "../login/actions";
+import { logout } from "@/app/login/actions";
 import styles from "./UserStatus.module.css";
 import * as queries from "@/lib/queries";
 import { fmt } from "@/utils";
@@ -16,7 +16,7 @@ function SignOut() {
 
 export default async function UserStatus() {
     const auth = await verifySession();
-    const [me] = await queries.userFromNetId(auth.universityId!);
+    const [me] = await queries.userFromUniversityId(auth.universityId!);
 
     return (
         <div className={styles.container}>

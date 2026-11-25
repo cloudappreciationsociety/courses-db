@@ -16,7 +16,7 @@ export default function SectionCard({ section: s }: { section: queries.SectionWi
         <details className={styles.card}>
 
             <summary className={styles.row}>
-                <input type="checkbox" className={styles.checkbox} />
+                <input type="checkbox" name="sectionId" className={styles.checkbox} value={s.sectionId} />
                 <span className={styles.name}>
                     <span className={styles.chevron} aria-hidden="true" />
                     {fmt.sectionTitle(s)}
